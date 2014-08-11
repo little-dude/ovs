@@ -1,113 +1,339 @@
-                 Open vSwitch <http://openvswitch.org>
+ovsdb has a nice json rpc interface, it's pretty nice to dump structured data.
+Unfortunately, tools like appctl don't support json. The goal of this project is to implement this.
 
-What is Open vSwitch?
----------------------
+Currently I just have a poc. 
 
-Open vSwitch is a multilayer software switch licensed under the open
-source Apache 2 license.  Our goal is to implement a production
-quality switch platform that supports standard management interfaces
-and opens the forwarding functions to programmatic extension and
-control.
+Using the unixctl python module we already have in ovs I connect to the vswitchd unix socket, and send `vlog/list` command.
+Here is the output :
 
-Open vSwitch is well suited to function as a virtual switch in VM
-environments.  In addition to exposing standard control and visibility
-interfaces to the virtual networking layer, it was designed to support
-distribution across multiple physical servers.  Open vSwitch supports
-multiple Linux-based virtualization technologies including
-Xen/XenServer, KVM, and VirtualBox.
-
-The bulk of the code is written in platform-independent C and is
-easily ported to other environments.  The current release of Open
-vSwitch supports the following features:
-
-    * Standard 802.1Q VLAN model with trunk and access ports
-    * NIC bonding with or without LACP on upstream switch
-    * NetFlow, sFlow(R), and mirroring for increased visibility
-    * QoS (Quality of Service) configuration, plus policing
-    * Geneve, GRE, GRE over IPSEC, VXLAN, and LISP tunneling
-    * 802.1ag connectivity fault management
-    * OpenFlow 1.0 plus numerous extensions
-    * Transactional configuration database with C and Python bindings
-    * High-performance forwarding using a Linux kernel module
-
-The included Linux kernel module supports Linux 2.6.32 and up, with
-testing focused on 2.6.32 with Centos and Xen patches.  Open vSwitch
-also has special support for Citrix XenServer and Red Hat Enterprise
-Linux hosts.
-
-Open vSwitch can also operate, at a cost in performance, entirely in
-userspace, without assistance from a kernel module.  This userspace
-implementation should be easier to port than the kernel-based switch.
-It is considered experimental.
-
-What's here?
-------------
-
-The main components of this distribution are:
-
-    * ovs-vswitchd, a daemon that implements the switch, along with 
-      a companion Linux kernel module for flow-based switching.
-
-    * ovsdb-server, a lightweight database server that ovs-vswitchd
-      queries to obtain its configuration.
-
-    * ovs-dpctl, a tool for configuring the switch kernel module.
-
-    * Scripts and specs for building RPMs for Citrix XenServer and Red
-      Hat Enterprise Linux.  The XenServer RPMs allow Open vSwitch to
-      be installed on a Citrix XenServer host as a drop-in replacement
-      for its switch, with additional functionality.
-
-    * ovs-vsctl, a utility for querying and updating the configuration
-      of ovs-vswitchd.
-
-    * ovs-appctl, a utility that sends commands to running Open
-      vSwitch daemons.
-
-Open vSwitch also provides some tools:
-
-    * ovs-ofctl, a utility for querying and controlling OpenFlow
-      switches and controllers.
-
-    * ovs-pki, a utility for creating and managing the public-key
-      infrastructure for OpenFlow switches.
-
-    * A patch to tcpdump that enables it to parse OpenFlow messages.
-
-What other documentation is available?
---------------------------------------
-
-To install Open vSwitch on a regular Linux or FreeBSD host, please
-read INSTALL.  For specifics around installation on a specific
-platform, please see one of these files:
-
-    - INSTALL.Debian
-    - INSTALL.Fedora
-    - INSTALL.RHEL
-    - INSTALL.XenServer
-
-To use Open vSwitch...
-
-    - ...with KVM on Linux, read INSTALL, read INSTALL.KVM.
-
-    - ...with Libvirt, read INSTALL.Libvirt.
-
-    - ...without using a kernel module, read INSTALL.userspace.
-
-For answers to common questions, read FAQ.
-
-To learn how to set up SSL support for Open vSwitch, read INSTALL.SSL.
-
-To learn about some advanced features of the Open vSwitch software
-switch, read the tutorial in tutorial/Tutorial.
-
-Each Open vSwitch userspace program is accompanied by a manpage.  Many
-of the manpages are customized to your configuration as part of the
-build process, so we recommend building Open vSwitch before reading
-the manpages.
-
-Contact 
--------
-
-bugs@openvswitch.org
-http://openvswitch.org/
+```
+    {
+  "ofproto_dpif_mirror"
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ofp_errors": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "in_band": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "command_line": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "cfm": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "poll_loop": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "util": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "connmgr": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "unixctl": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ofproto_dpif": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "stream_fd": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "netdev_vport": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "bundle": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "backtrace": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "lacp": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "bundles": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "svec": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ovsdb_idl": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "stp": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "pktbuf": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ovsdb_error": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "classifier": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "bfd": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "bridge": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "netdev_dummy": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "nx_match": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "rconn": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ofproto_dpif_monitor
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "vconn": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "process": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "lockfile": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "sflow": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ofproto": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "meta_flow": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "netdev": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "vlog": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "route_table": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "system_stats": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "multipath": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "timeval": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "netflow": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "netlink_notifier": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "jsonrpc": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "netlink_socket": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ofp_util": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "reconnect": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "entropy": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ipfix": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ofp_actions": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "xenserver": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ovs_rcu": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "vswitchd": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ofproto_dpif_upcall"
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "hmap": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "fatal_signal": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "dpif_linux": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "netlink": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "socket_util_unix": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "dpif_netdev": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ovs_thread": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "signals": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "coverage": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ofp_msgs": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "vlandev": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "daemon_unix": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "socket_util": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "tunnel": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "daemon": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "collectors": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "vconn_stream": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "stream_ssl": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "stream_unix": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "bond": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "memory": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "stream": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "stream_tcp": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "fail_open": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "ofproto_dpif_xlate":
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "pcap": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "netdev_linux": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "dpif": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"},
+  "odp_util": {
+    "level": "INFO",
+    "console": "OFF",
+    "syslog": "INFO"}}
+    ````
