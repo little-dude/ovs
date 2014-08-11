@@ -40,6 +40,7 @@
 #include "timeval.h"
 #include "unixctl.h"
 #include "util.h"
+#include "json.h"
 
 VLOG_DEFINE_THIS_MODULE(vlog);
 
@@ -660,6 +661,37 @@ vlog_enable_async(void)
 char *
 vlog_get_levels(void)
 {
+    struct vlog_module *mp;
+    struct json *res;
+    struct json *module_json_object;
+    const char *console_field = "console";
+    const char *syslog_field = "syslog";
+    const char *level_field = "level";
+
+    res = json_object_create();
+    module_json_object = json_object_create();
+    LIST_FOR_EACH (mp, list, &vlog_modules) {
+        json_object_put_string(
+                module_json_object, 
+                console_field,
+                vlog_get_level_name(vlog_get_level(mp, VLF_CONSOLE))),
+        json_object_put_string(
+                module_json_object, 
+                syslog_field,
+                vlog_get_level_name(vlog_get_level(mp, VLF_SYSLOG))),
+        json_object_put_string(
+                module_json_object, 
+                level_field,
+                vlog_get_level_name(vlog_get_level(mp, VLF_FILE)));
+        json_object_put(res, vlog_get_module_name(mp), module_json_object);
+    }
+    return json_to_string(res, JSSF_PRETTY);
+}
+
+/* Print the current logging level for each module. */
+/* char *
+vlog_get_levels(void)
+{
     struct ds s = DS_EMPTY_INITIALIZER;
     struct vlog_module *mp;
     struct svec lines = SVEC_EMPTY_INITIALIZER;
@@ -694,6 +726,7 @@ vlog_get_levels(void)
 
     return ds_cstr(&s);
 }
+*/
 
 /* Returns true if a log message emitted for the given 'module' and 'level'
  * would cause some log output, false if that module and level are completely
